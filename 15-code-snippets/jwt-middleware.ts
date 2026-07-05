@@ -4,7 +4,6 @@ import jwt from "jsonwebtoken";
 export interface JwtPayload {
   userId: string;
   role: string;
-  // additional claims...
 }
 
 declare global {
