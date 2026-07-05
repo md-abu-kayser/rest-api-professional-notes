@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/md-abu-kayser/rest-api-professional-notes#readme",
   "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^26.1.0",
     "typescript": "^6.0.3"
   },
