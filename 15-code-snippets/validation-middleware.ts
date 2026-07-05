@@ -1,12 +1,26 @@
-import { body, validationResult } from "express-validator";
+import { Request, Response, NextFunction } from "express";
+import { ZodSchema, ZodError } from "zod";
 
-export const validate = [
-  body("email").isEmail(),
-  (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+export function validate(
+  schema: ZodSchema,
+  source: "body" | "query" | "params" = "body",
+) {
+  return (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const data = schema.parse(req[source]);
+      req[source] = data;
+      next();
+    } catch (error) {
+      if (error instanceof ZodError) {
+        return res.status(400).json({
+          success: false,
+          errors: error.errors.map((e) => ({
+            field: e.path.join("."),
+            message: e.message,
+          })),
+        });
+      }
+      next(error);
     }
-    next();
-  },
-];
+  };
+}
